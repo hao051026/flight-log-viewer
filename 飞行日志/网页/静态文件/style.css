@@ -1,0 +1,394 @@
+/* ============================================================
+   飞行日志查看器 — Neo-Brutalist 新野兽派
+   黑框 / 硬阴影 / 零圆角 / 高对比 / 四支强调色
+   ============================================================ */
+
+:root {
+  /* 配色 */
+  --ink: #000000;
+  --paper: #ffffff;
+  --slab: #f4f4f4;
+  --pink: #ff006e;
+  --lime: #ccff00;
+  --cyan: #00d9ff;
+  --tangerine: #ff9500;
+
+  /* 字体 */
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Courier New", monospace;
+  --font-sans: Inter, "Helvetica Neue", Arial, "Microsoft YaHei", sans-serif;
+
+  /* 字距 */
+  --tracking-label: 0.12em;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-mono);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection { background: var(--pink); color: #fff; }
+
+/* ---- 顶部 Marquee Bar：黑底白字滚动条 ---- */
+.marquee-bar {
+  background: var(--ink);
+  color: var(--paper);
+  overflow: hidden;
+  white-space: nowrap;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 8px 0;
+  border-bottom: 2px solid var(--ink);
+  display: flex;
+}
+.marquee-bar span {
+  display: inline-block;
+  padding-right: 24px;
+  animation: marquee 22s linear infinite;
+}
+.marquee-bar span:nth-child(2) { animation: marquee 22s linear infinite; }
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-100%); }
+}
+
+/* ---- 页头 ---- */
+.site-head {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 40px 24px 32px;
+}
+.display {
+  font-family: var(--font-sans);
+  font-weight: 900;
+  font-size: 64px;
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+}
+.display .pink { color: var(--pink); }
+.headline {
+  font-size: 14px;
+  margin-top: 16px;
+  padding-left: 4px;
+  border-left: 8px solid var(--ink);
+  padding-left: 16px;
+  max-width: 640px;
+}
+.badge-row { display: flex; gap: 12px; margin-top: 24px; flex-wrap: wrap; }
+
+/* ---- Mono Label 徽标 ---- */
+.badge {
+  background: var(--ink);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 4px 8px;
+  outline: 2px solid var(--ink);
+  transition: all 150ms ease-out;
+}
+.badge:hover { transform: translate(-2px,-2px); box-shadow: 4px 4px 0 0 var(--ink); }
+.badge.cyan { background: var(--ink); }
+.badge.cyan:hover { background: var(--cyan); color:#000; box-shadow: 4px 4px 0 0 var(--ink); }
+.badge.lime:hover { background: var(--lime); color:#000; box-shadow: 4px 4px 0 0 var(--ink); }
+.badge.pink:hover { background: var(--pink); color:#fff; box-shadow: 4px 4px 0 0 var(--ink); }
+
+/* ---- 容器 ---- */
+.container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 16px 24px 32px;
+  width: 100%;
+}
+
+/* ---- Brutal Card 卡片 ---- */
+.card {
+  position: relative;
+  background: var(--paper);
+  border: 3px solid var(--ink);
+  border-radius: 0;
+  box-shadow: 8px 8px 0 0 var(--ink);
+  padding: 24px;
+  margin-bottom: 32px;
+  transition: transform 150ms ease-out, box-shadow 150ms ease-out;
+}
+.card:hover {
+  transform: translate(-4px,-4px);
+  box-shadow: 10px 10px 0 0 var(--ink);
+}
+.card .torn-index {
+  position: absolute;
+  top: -3px; right: 24px;
+  width: 64px; height: 26px;
+  background: var(--ink);
+  clip-path: polygon(0 0, 100% 0, 100% 70%, 94% 100%, 0 100%);
+}
+.cyan .torn-index,
+.torn-index.cyan { background: var(--cyan); }
+.torn-index.lime { background: var(--lime); }
+.torn-index.pink { background: var(--pink); }
+
+.card-label {
+  display: inline-block;
+  background: var(--ink);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 4px 8px;
+  margin-bottom: 16px;
+}
+.card-title {
+  font-family: var(--font-sans);
+  font-weight: 900;
+  font-size: 32px;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  margin-bottom: 16px;
+}
+
+/* ---- 上传区 ---- */
+.upload { border-color: var(--ink); }
+.upload-row { display: flex; gap: 16px; align-items: stretch; flex-wrap: wrap; }
+.dropzone {
+  flex: 1;
+  min-width: 260px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 32px 24px;
+  border: 3px dashed var(--ink);
+  background: var(--slab);
+  cursor: pointer;
+  transition: all 150ms ease-out;
+  text-align: center;
+}
+.dropzone:hover { background: var(--lime); }
+.dropzone input[type="file"] { position: absolute; width:1px; height:1px; opacity:0; overflow:hidden; }
+.dropzone-icon { font-size: 40px; line-height: 1; }
+.dropzone-text { font-weight: 700; font-size: 14px; }
+.dropzone-sub { font-size: 12px; opacity: .8; }
+
+/* ---- Brutal Button 主按钮 ---- */
+.brutal-btn {
+  background: var(--paper);
+  border: 3px solid var(--ink);
+  border-radius: 0;
+  box-shadow: 4px 4px 0 0 var(--ink);
+  padding: 12px 24px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 150ms ease-out;
+  white-space: nowrap;
+}
+.brutal-btn:hover {
+  transform: translate(-4px,-4px);
+  box-shadow: 10px 10px 0 0 var(--ink);
+  background: var(--lime);
+}
+.brutal-btn:active {
+  transform: translate(6px,6px);
+  box-shadow: none;
+}
+.brutal-btn:disabled { opacity: .5; cursor: not-allowed; }
+
+/* ---- 状态提示 ---- */
+.status {
+  margin-top: 16px;
+  font-weight: 700;
+}
+.status.err { color: var(--pink); }
+.status.ok { color: var(--ink); background: var(--lime); display:inline-block; padding: 4px 8px; outline:2px solid var(--ink); }
+
+/* ---- 摘要表 ---- */
+#summary .brutal-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 12px;
+  font-size: 13px;
+}
+#summary .brutal-table th, #summary .brutal-table td {
+  border: 2px solid var(--ink);
+  padding: 8px 12px;
+  text-align: left;
+  vertical-align: top;
+}
+#summary .brutal-table thead th { background: var(--ink); color:#fff; font-weight:700; letter-spacing:0.06em; }
+#summary .brutal-table td.note {
+  font-size: 12px;
+  color: #333;
+  background: var(--slab);
+}
+#summary .brutal-table tr:hover td { background: var(--lime); }
+#summary .brutal-table tr:hover td.note { background: var(--lime); }
+
+/* 通道注解条 */
+.channel-notes {
+  margin-top: 12px;
+  border: 2px solid var(--ink);
+  background: var(--slab);
+  padding: 12px 16px;
+  font-size: 13px;
+  line-height: 1.7;
+}
+.channel-notes b { background: var(--ink); color:#fff; padding: 1px 6px; font-size: 12px; letter-spacing: 0.06em; }
+
+/* ---- 3D 飞行轨迹 ---- */
+.track-meta {
+  border: 2px solid var(--ink);
+  background: var(--slab);
+  padding: 10px 14px;
+  font-size: 13px;
+  margin-bottom: 14px;
+}
+.track-meta b { background: var(--ink); color:#fff; padding: 1px 5px; font-size: 12px; }
+#trackWrap {
+  position: relative;
+  width: 100%;
+  height: 460px;
+  border: 3px solid var(--ink);
+  background: var(--paper);
+  overflow: hidden;
+}
+#trackCanvas { display: block; width: 100%; height: 100%; }
+.track-hint {
+  position: absolute;
+  bottom: 8px; left: 10px;
+  font-size: 11px;
+  background: var(--ink);
+  color: #fff;
+  padding: 4px 8px;
+  pointer-events: none;
+  z-index: 2;
+}
+.track-legend {
+  display: flex;
+  gap: 18px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+  font-size: 12px;
+}
+.track-legend span { display: inline-flex; align-items: center; gap: 6px; }
+.track-legend i { display: inline-block; width: 16px; height: 5px; }
+
+/* ---- 播放控制条 ---- */
+.track-controls, .chart-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 12px;
+  margin-bottom: 4px;
+  flex-wrap: wrap;
+  border: 2px solid var(--ink);
+  background: var(--slab);
+  padding: 10px 14px;
+}
+.btn-sm { padding: 6px 14px; font-size: 11px; }
+.track-seek {
+  flex: 1;
+  min-width: 120px;
+  height: 6px;
+  background: var(--ink);
+  appearance: none;
+  -webkit-appearance: none;
+  border-radius: 0;
+  cursor: pointer;
+}
+.track-seek::-webkit-slider-thumb {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 18px; height: 18px;
+  background: var(--pink);
+  border: 2px solid var(--ink);
+  border-radius: 0;
+  cursor: grab;
+}
+.track-seek::-moz-range-thumb {
+  width: 16px; height: 16px;
+  background: var(--pink);
+  border: 2px solid var(--ink);
+  border-radius: 0;
+  cursor: grab;
+}
+.track-speed {
+  background: var(--paper);
+  border: 2px solid var(--ink);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 700;
+  padding: 6px 8px;
+  cursor: pointer;
+}
+#trackProgressLabel, #chartProgressLabel {
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.chart-hint { border-left: 3px solid var(--ink); padding-left: 8px; margin-top: 0; }
+
+/* ---- 图表区 ---- */
+.chart-toolbar { margin-bottom: 16px; }
+.chart-toolbar select {
+  width: 100%;
+  background: var(--paper);
+  border: 3px solid var(--ink);
+  border-radius: 0;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  padding: 12px 16px;
+  margin-top: 8px;
+}
+.chart-toolbar select:focus { box-shadow: 4px 4px 0 0 var(--ink); outline:none; }
+.hint { font-size: 12px; opacity: .7; margin-top: 8px; }
+
+#chartWrap {
+  position: relative;
+  width: 100%;
+  height: 420px;
+  border: 3px solid var(--ink);
+  background: var(--paper);
+}
+canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* ---- 页脚 ---- */
+.site-foot {
+  border-top: 3px solid var(--ink);
+  background: var(--ink);
+  color: #fff;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 16px 24px;
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* ---- 响应式 ---- */
+@media (max-width: 640px) {
+  .display { font-size: 44px; }
+  .upload-row { flex-direction: column; }
+  .site-foot { flex-direction: column; }
+}

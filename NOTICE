@@ -1,0 +1,55 @@
+飞行日志查看器 (Flight Log Viewer)
+====================================
+Copyright (C) 2026 hao051026 (小冉学长)
+
+本项目基于 GNU GPL v3 许可发布，详见 LICENSE 文件。
+
+本项目在实现过程中参考、移植了以下第三方开源项目的代码与格式规范，
+对这些项目及其作者表示感谢：
+
+--------------------------------------------------------------------
+1. Betaflight Blackbox 二进制解码算法
+   来源: betaflight/blackbox-tools
+   仓库: https://github.com/betaflight/blackbox-tools
+   许可: GNU General Public License v3.0
+   用途: 本项目的「二进制黑盒解析.py」的变长整型、ZigZag、
+         TAG8_4S16 / TAG2_3S32 / TAG8_8SVB、Elias 编码，
+         predictor 预测器与帧解析逻辑，忠实移植自该项目的
+         parser.c / decoders.c / stream.c。
+
+2. ArduPilot DataFlash 格式规范
+   来源: ArduPilot / MissionPlanner
+   仓库: https://github.com/ArduPilot/ardupilot
+         https://github.com/ArduPilot/MissionPlanner
+   许可: GNU General Public License v3.0
+   用途: 「阿德解析.py」所实现的 .bin/.log DataFlash 自描述
+         FMT 消息结构与字段类型映射，参考自 MissionPlanner 的
+         LogAnalyzer/py2exe/DataflashLog.py。
+
+3. Betaflight Golden Master 黑盒日志 (BTFL_BLACKBOX_LOG_BD1...BBL)
+   来源: bartoszp1992/chimeraDrone
+   仓库: https://github.com/bartoszp1992/chimeraDrone
+   许可: GNU General Public License v3.0
+   用途: 仅作为本地测试数据（不随本仓库分发，见 .gitignore）。
+
+4. Blackbox 错误恢复测试日志 (error_recovery.bbl)
+   来源: blackbox-log/blackbox-log
+   仓库: https://github.com/blackbox-log/blackbox-log
+   许可: Apache License 2.0
+   用途: 仅作为本地测试数据（不随本仓库分发，见 .gitignore）。
+
+5. ArduPilot 飞行日志测试数据 (log171.bin / flight.tlog)
+   来源: dronekit/dronekit-la-testdata
+   仓库: https://github.com/dronekit/dronekit-la-testdata
+   许可: 该仓库未声明许可证（保留所有权利）
+   用途: 仅作为本地测试数据（不随本仓库分发，见 .gitignore）。
+
+--------------------------------------------------------------------
+依赖库许可：
+  numpy      — BSD 3-Clause
+  pandas     — BSD 3-Clause
+  matplotlib — PSF-based (兼容宽松许可)
+  flask      — BSD 3-Clause
+
+本项目中的样例日志（样例/*.bin, *.csv）与图表均为程序自动生成的
+合成数据 / 自绘产物，不包含第三方内容，可自由分发。

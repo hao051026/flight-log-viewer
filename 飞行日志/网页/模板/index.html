@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>飞行日志查看器 · NEO-BRUTAL</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+  <!-- Marquee Bar：顶部滚动条（等宽、全大写、黑底白字） -->
+  <div class="marquee-bar">
+    <span>FLIGHT LOG VIEWER ▪ 飞行日志查看器 ▪ NEO-BRUTAL EDITION ▪ ARDUPLOT / BETAFIGHT / INAV ▪</span>
+    <span>FLIGHT LOG VIEWER ▪ 飞行日志查看器 ▪ NEO-BRUTAL EDITION ▪ ARDUPLOT / BETAFIGHT / INAV ▪</span>
+  </div>
+
+  <header class="site-head">
+    <h1 class="display">飞行日志<span class="pink">查看器</span></h1>
+    <p class="headline mono">读取并解析主流开源飞控的飞行日志，提供统计摘要与图表分析</p>
+    <div class="badge-row">
+      <span class="badge">BETAFLIGHT / INAV</span>
+      <span class="badge cyan">ARDUPLOT</span>
+      <span class="badge lime">.BIN / .BBL / .CSV / .LOG</span>
+      <span class="badge pink">小冉学长 ✚ 出品</span>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- 上传卡片 -->
+    <section class="card upload neon-card">
+      <div class="torn-index"></div>
+      <span class="card-label">01 // 选择日志</span>
+      <h2 class="card-title">上传飞行日志文件</h2>
+      <div class="upload-row">
+        <label for="fileInput" class="dropzone" id="dropzone">
+          <span class="dropzone-icon">⬇</span>
+          <span class="dropzone-text mono">拖入日志文件，或点击选择</span>
+          <span class="dropzone-sub mono">支持 .bin / .bbl / .csv / .log</span>
+          <input type="file" id="fileInput" accept=".csv,.bbl,.bin,.log">
+        </label>
+        <button id="uploadBtn" class="brutal-btn">上传并分析 ▸</button>
+      </div>
+      <div id="status" class="status mono"></div>
+    </section>
+
+    <!-- 摘要卡片 -->
+    <section class="card" id="summaryCard" style="display:none">
+      <div class="torn-index cyan"></div>
+      <span class="card-label">02 // 飞行摘要</span>
+      <h2 class="card-title">关键统计</h2>
+      <div id="summary"></div>
+    </section>
+
+    <!-- 曲线卡片 -->
+    <section class="card" id="chartCard" style="display:none">
+      <div class="torn-index lime"></div>
+      <span class="card-label">03 // 数据曲线</span>
+      <h2 class="card-title">通道可视化</h2>
+      <div class="chart-toolbar">
+        <span class="mono">选择通道：</span>
+        <select id="channelSelect" multiple size="6"></select>
+        <div class="hint mono">按住 Ctrl 可多选</div>
+      </div>
+      <div class="chart-controls">
+        <button id="chartPlayBtn" class="brutal-btn btn-sm" title="播放数据曲线">▶ 播放</button>
+        <span class="mono" id="chartProgressLabel">0 / 0 帧</span>
+        <input type="range" id="chartSeek" min="0" max="100" value="0" class="track-seek">
+        <span class="hint mono chart-hint">滚轮：缩放曲线</span>
+      </div>
+      <div id="chartWrap">
+        <canvas id="logChart"></canvas>
+      </div>
+    </section>
+
+    <!-- 3D 飞行轨迹卡片 -->
+    <section class="card" id="trackCard" style="display:none">
+      <div class="torn-index pink"></div>
+      <span class="card-label">04 // 3D 飞行轨迹</span>
+      <h2 class="card-title">三维轨迹</h2>
+      <div id="trackMeta" class="mono track-meta"></div>
+      <div id="trackWrap">
+        <canvas id="trackCanvas"></canvas>
+        <div id="trackHint" class="track-hint mono">🖱 拖拽旋转 ｜ 滚轮缩放</div>
+      </div>
+      <div class="track-controls">
+        <button id="trackPlayBtn" class="brutal-btn btn-sm" title="播放/暂停">▶ 播放</button>
+        <span class="mono" id="trackProgressLabel">0 / 0 帧</span>
+        <input type="range" id="trackSeek" min="0" max="100" value="0" class="track-seek">
+        <select id="trackSpeed" class="track-speed" title="播放速度">
+          <option value="0.5">0.5×</option>
+          <option value="1" selected>1×</option>
+          <option value="2">2×</option>
+          <option value="4">4×</option>
+        </select>
+      </div>
+      <div class="track-legend mono">
+        <span><i style="background:#000"></i>轨迹线</span>
+        <span><i style="background:#ff006e"></i>起点</span>
+        <span><i style="background:#00d9ff"></i>终点</span>
+        <span><i style="background:#ccff00"></i>地面网格</span>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-foot mono">
+    <span>FLIGHT LOG VIEWER ▸ NEO-BRUTAL</span>
+    <span>BLACK LINES ▪ HARD SHADOWS ▪ ZERO RADIUS ▪ 小冉学长 ✚ 出品</span>
+  </footer>
+
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
